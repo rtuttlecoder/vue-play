@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.css">
+    <title>Vue playground</title>
+    <style>
+        .color-red {
+            color: red;
+        }
+
+        .color-blue {
+            color: blue;
+        }
+
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <h1 :class="{ 'color-red': isLoading }" @click="toggleClass">The Heading</h1>
+        <h3 v-text="new Date()"></h3>
+        <button v-bind:title="title">Hover Over Me</button>
+        <hr />
+        <input type="text" id="input" v-model="message" />
+        <p>The value of the input is: {{ message }}.</p>
+        <p>Its reverse value is: {{ reversedMessage }}</p>
+        <ul>
+            <li v-for="name in names">{{ name }}</li>
+        </ul>
+        <input id="input" type="text" v-model="newName">
+        <button @click="addName">add name</button>
+        <hr />
+        <h4 class="title">All Tasks:</h4>
+        <ul>
+            <li v-for="task in tasks" v-text="task.description"></li>
+        </ul>
+        <hr />
+        <h4 class="title">Incomplete Tasks:</h4>
+        <ul>
+            <li v-for="task in incompleteTasks" v-text="task.description"></li>
+        </ul>
+        <hr />
+        <h4 class="title">Vue Components</h4>
+        <task-list></task-list>
+        <hr />
+        <modal>
+            <template slot="header">This is my Title</template>
+            This is some valuable content withing a modal!
+            <div slot="footer">
+                <a class="button is-success">Save changes</a>
+                <a class="button">cancel</a>
+            </div>
+        </modal>
+        <button @click="showModal = true">Show Modal</button>
+        <hr />
+        <tabs>
+            <tab name="About Us" :selected="true">
+                <h1>Here is the content about us.</h1>
+            </tab>
+            <tab name="About Our Culture">
+                <h1>Here is the content about our culture.</h1>
+            </tab>
+            <tab name="About Our Vision">
+                <h1>Here is the last bit of content just for YOU!</h1>
+            </tab>
+        </tabs>
+        <hr />
+        <coupon v-on:applied="onCouponApplied"></coupon>
+        <h1 v-if="couponApplied">You used a coupon!</h1>
+        <hr />
+        <progress-view inline-template>
+            <div>
+                <h1>Progress through the course is {{ completionRate }}%</h1>
+                <p><button @click="completionRate += 10">update rate</button></p>
+            </div>
+        </progress-view>
+    </div>
+
+    <script>
+        window.Event = new Vue(); // a shared event instance
+
+        Vue.component('progress-view', {
+            data() {
+                return { completionRate: 50 };
+            }
+        });
+
+        Vue.component('coupon', {
+            template: `<input placeholder="enter your coupon code" @blur="onCouponApplied">`,
+            methods: {
+                onCouponApplied() {
+                    // this.$emit('applied');
+                    Event.$emit('applied');
+                }
+            }
+        });
+
+        Vue.component('tabs', {
+            template: `
+                <div>
+                    <div class="tabs">
+                        <ul>
+                            <li v-for="tab in tabs" :class="{ 'is-active': tab.isActive }">
+                                <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tabs-details">
+                        <slot></slot>
+                    </div>
+                </div>
+            `,
+            data() {
+                return {
+                    tabs: []
+                };
+            },
+            created() {
+                this.tabs = this.$children;
+            },
+            methods: {
+                selectTab(selectedTab) {
+                    this.tabs.forEach(tab => {
+                        tab.isActive = (tab.name == selectedTab.name);
+                    });
+                }
+            }
+        });
+
+        Vue.component('tab', {
+            template: `
+                <div v-show="isActive"><slot></slot></div>
+            `,
+            props: {
+                name: {
+                    required: true
+                },
+                selected: {
+                    default: false
+                }
+            },
+            data() {
+                return {
+                    isActive: false
+                };
+            },
+            computed: {
+                href() {
+                    return '#' + this.name.toLowerCase().replace(/ /g, '-');
+                }
+            },
+            mounted() {
+                this.isActive = this.selected;
+            }
+        });
+
+        Vue.component('modal', {
+            template: `
+                <div class="modal">
+                    <div class="modal-background"></div>
+                    <div class="model-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">
+                                <slot name="header"></slot>
+                            </p>
+                            <button class="delete" aria-label="close"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <slot>default content here.</slot>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <slot name="footer"></slot>
+                        </footer>
+                    </div>
+                </div>
+            `
+        });
+
+        Vue.component('task-list', {
+            template: '<ul><task v-for="task in tasks2" :key="task.id">{{ task.description }}</task></ul>',
+            data() {
+                return {
+                    tasks2: [{
+                            description: 'Go to the store',
+                            completed: true
+                        },
+                        {
+                            description: 'Finish screenplay',
+                            completed: false
+                        },
+                        {
+                            description: 'Make donation',
+                            completed: false
+                        },
+                        {
+                            description: 'Clear inbox',
+                            completed: false
+                        },
+                        {
+                            description: 'Make dinner',
+                            completed: false
+                        },
+                        {
+                            description: 'Clean room',
+                            completed: true
+                        }
+                    ]
+                };
+            },
+            methods: {}
+        });
+        
+        Vue.component('task', {
+            template: '<li><slot></slot></li>'
+        });
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "Hello World",
+                names: ['Richard', 'Mary', 'Scott', 'Viliam'],
+                newName: '',
+                title: 'Now the title is being set through JS!',
+                isLoading: false,
+                tasks: [{
+                        description: 'Go to the store',
+                        completed: true
+                    },
+                    {
+                        description: 'Finish screenplay',
+                        completed: false
+                    },
+                    {
+                        description: 'Make donation',
+                        completed: false
+                    },
+                    {
+                        description: 'Clear inbox',
+                        completed: false
+                    },
+                    {
+                        description: 'Make dinner',
+                        completed: false
+                    },
+                    {
+                        description: 'Clean room',
+                        completed: true
+                    }
+                ],
+                showModal: false,
+                couponApplied: false
+            },
+            methods: {
+                addName() {
+                    this.names.push(this.newName);
+                    this.newName = '';
+                },
+                toggleClass() {
+                    this.isLoading = true;
+                },
+                onCouponApplied() {
+                    // alert('It was applied!');
+                    this.couponApplied = true;
+                }
+            },
+            computed: {
+                reversedMessage() {
+                    return this.message.split('').reverse().join('');
+                },
+                incompleteTasks() {
+                    return this.tasks.filter(task => !task.completed);
+                }
+            },
+            mounted() {
+                alert('READY!');
+            }
+        });
+    </script>
+</body>
+
+</html>

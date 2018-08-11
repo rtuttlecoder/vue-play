@@ -1,0 +1,27 @@
+{
+  "name": "vue-instagram-clone-complete",
+  "version": "1.0.0",
+  "description": "An Instagram clone built with Vue.js and CSSGram. Upload photos, pick filters, and like posts!",
+  "keywords": [],
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "vue": "2.5.3",
+    "vue-dragscroll": "1.4.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "vue-loader": "^15.2.4",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
+  }
+}

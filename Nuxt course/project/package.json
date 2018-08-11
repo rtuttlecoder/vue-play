@@ -1,0 +1,24 @@
+{
+  "name": "nuxt-course-project",
+  "version": "1.0.0",
+  "description": "Vue Blog",
+  "author": "Richard Tuttle",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.1",
+    "axios": "^0.18.0",
+    "js-cookie": "^2.2.0",
+    "nuxt": "^1.4.1"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "cross-env": "^5.2.0",
+    "express": "^4.16.3"
+  }
+}

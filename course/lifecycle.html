@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Instance Lifecycle</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<div id="app">
+  <h1>{{ title }}</h1>
+  <p>new Vue() -> beforeCreate()</p>
+  <p>initalize Data &amp; Events</p>
+  <p>Instance created -> created()</p>
+  <p>compile template or <em>el</em>'s template</p>
+  <p>-> beforeMount()</p>
+  <p>replace <em>el</em> with compiled template</p>
+  <p>Mounted to the DOM</p>
+  <ul>
+    <li>data changed -> beforeUpdate()</li>
+    <li>re-render DOM</li>
+    <li>Mounted to the DOM</li>
+  </ul>
+  <p>-> beforeDestroy()</p>
+  <p>destroyed -> destroyed()</p>
+    <button @click="title = 'Changed'">Update Title</button>
+  <button @click="destroy">destroy</button>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+  	title: 'The VueJS Instance Lifecycle'
+  },
+beforeCreate: function() {
+  	console.log('beforeCreate()');
+  },
+  created: function() {
+  	console.log('created()');
+  },
+  beforeMount: function() {
+  	console.log('beforeMount()');
+  },
+  mounted: function() {
+  	console.log('mounted()');
+  },
+  beforeUpdate: function() {
+  	console.log('beforeUpdate()');
+  },
+  updated: function() {
+  	console.log('updated()');
+  },
+  beforeDestroy: function() {
+  	console.log('beforeDestroy()');
+  },
+  destroyed: function() {
+  	console.log('destroy()');
+  },
+  methods: {
+  	destroy: function() {
+    	this.$destroy();
+    }
+  }
+});
+</script>
+</body>
+</html>

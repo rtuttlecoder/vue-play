@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+    <title>Typing Speed Tester</title>
+    <style>
+    .correct { color: rgb(63, 81, 181); font-size: 22px; }
+    .typo { color: #f00; font-size: 22px; }
+    .timer { font-size: 100px; text-align: center; color: white; border-radius: 100; background-color: green; }
+    </style>
+</head>
+<body>
+    <div id="app" class="container mt-2">
+        <h1>{{ title }}</h1>
+        <div class="row">
+            <div class="col-8">
+                <div class="paragraph" v-html="outputHTML"></div>
+                <div class="typer mt-3">
+                    <textarea rows="10" id="exampleFormControlTextarea1" v-model="typedText" placeholder="start typing here" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="col-4">
+                <button class="btn btn-primary btn-block" @click="reset()">reset</button>
+                <div class="timer" mt-3>{{ timer }}</div>
+                <div class="scoreboard mt-3">
+                    <h2>Scoreboard</h2>
+                    <div class="scores" v-for="(score, index) in sortedScores">
+                        {{ index + 1 }}. {{ score.wpm }} WPM, {{ score.typos }} Typos
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
